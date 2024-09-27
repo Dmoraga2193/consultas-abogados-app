@@ -115,6 +115,91 @@ const preguntasRelacionadas = {
       opciones: ["Sí", "No"],
     },
   ],
+  "accidente de tránsito": [
+    {
+      id: 1,
+      texto: "¿Hubo lesionados?",
+      opciones: ["Sí", "No"],
+    },
+    {
+      id: 2,
+      texto: "¿Quién tuvo la culpa?",
+      opciones: ["Yo", "El otro conductor", "No está claro"],
+    },
+    {
+      id: 3,
+      texto: "¿El seguro cubre los daños?",
+      opciones: ["Sí", "No"],
+    },
+  ],
+  adopcion: [
+    {
+      id: 1,
+      texto: "¿Es una adopción nacional o internacional?",
+      opciones: ["Nacional", "Internacional"],
+    },
+    {
+      id: 2,
+      texto: "¿La pareja es casada o soltera?",
+      opciones: ["Casada", "Soltera"],
+    },
+    {
+      id: 3,
+      texto: "¿El menor tiene más de 12 años?",
+      opciones: ["Sí", "No"],
+    },
+  ],
+  "violencia doméstica": [
+    {
+      id: 1,
+      texto: "¿Has denunciado antes?",
+      opciones: ["Sí", "No"],
+    },
+    {
+      id: 2,
+      texto: "¿Necesitas una orden de restricción?",
+      opciones: ["Sí", "No"],
+    },
+    {
+      id: 3,
+      texto: "¿Hay hijos involucrados?",
+      opciones: ["Sí", "No"],
+    },
+  ],
+  impuestos: [
+    {
+      id: 1,
+      texto: "¿Es para declaración personal o empresarial?",
+      opciones: ["Personal", "Empresarial"],
+    },
+    {
+      id: 2,
+      texto: "¿Tienes impuestos atrasados?",
+      opciones: ["Sí", "No"],
+    },
+    {
+      id: 3,
+      texto: "¿Has recibido alguna notificación de auditoría?",
+      opciones: ["Sí", "No"],
+    },
+  ],
+  "propiedad intelectual": [
+    {
+      id: 1,
+      texto: "¿Es una patente, derecho de autor o marca registrada?",
+      opciones: ["Patente", "Derecho de autor", "Marca registrada"],
+    },
+    {
+      id: 2,
+      texto: "¿Has registrado la propiedad?",
+      opciones: ["Sí", "No"],
+    },
+    {
+      id: 3,
+      texto: "¿Necesitas asistencia en caso de infracción?",
+      opciones: ["Sí", "No"],
+    },
+  ],
 };
 
 // Función para normalizar texto y eliminar tildes
@@ -161,16 +246,27 @@ export default function ConsultaLegal() {
     if (paso < preguntasRelacionadas[normalizarTexto(tema.trim())].length) {
       setPaso(paso + 1);
     } else {
-      const precioBase = 100;
+      const precioBase = 100000; // Precio base en pesos chilenos (100 mil)
+
+      // Calcular el precio final basado en las respuestas
       const precioFinal =
         precioBase +
         respuestas.reduce((acc, resp) => {
           if (resp === "3 o más" || resp === "Alto" || resp === "No") {
-            return acc + 50;
+            return acc + 50000; // Incremento de 50 mil
           }
-          return acc + 25;
+          return acc + 25000; // Incremento de 25 mil
         }, 0);
-      setPrecio(precioFinal);
+
+      // Formatear el precio en miles con moneda CLP
+      const precioFormateado = new Intl.NumberFormat("es-CL", {
+        style: "currency",
+        currency: "CLP",
+        minimumFractionDigits: 0,
+      }).format(precioFinal);
+
+      // Mostrar el precio formateado con el texto "+ IVA"
+      setPrecio(`${precioFormateado} + IVA`);
       setPaso(paso + 1);
     }
   };
@@ -251,7 +347,7 @@ export default function ConsultaLegal() {
             <Text style={styles.resultTitle}>
               Precio estimado de la consulta:
             </Text>
-            <Text style={styles.resultPrice}>${precio}</Text>
+            <Text style={styles.resultPrice}>{precio}</Text>
 
             {/* Información de contacto del ejecutivo */}
             <View style={styles.contactCard}>
