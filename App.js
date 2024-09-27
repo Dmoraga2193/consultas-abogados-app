@@ -3,11 +3,13 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   Alert,
   StyleSheet,
   TouchableOpacity,
+  Platform,
+  Image,
 } from "react-native";
+import Swal from "sweetalert2";
 
 const preguntasRelacionadas = {
   "pension alimenticia": [
@@ -130,13 +132,26 @@ export default function ConsultaLegal() {
 
   const handleSubmit = () => {
     const temaNormalizado = normalizarTexto(tema.trim());
+
     if (temaNormalizado in preguntasRelacionadas) {
       setPaso(1);
     } else {
-      Alert.alert(
-        "Lo siento",
-        "No tenemos información sobre ese tema específico."
-      );
+      if (Platform.OS === "web") {
+        // Usar SweetAlert en web con heightAuto: false para evitar el desplazamiento
+        Swal.fire({
+          title: "Lo siento",
+          text: "No tenemos información sobre ese tema específico.",
+          icon: "error",
+          confirmButtonText: "OK",
+          heightAuto: false, // Evita que SweetAlert ajuste el tamaño automáticamente
+        });
+      } else {
+        // Usar Alert.alert en móvil
+        Alert.alert(
+          "Lo siento",
+          "No tenemos información sobre ese tema específico."
+        );
+      }
     }
   };
 
@@ -169,6 +184,8 @@ export default function ConsultaLegal() {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
+        {/* Logo */}
+        <Image source={require("./static/logo/logo.png")} style={styles.logo} />
         <Text style={styles.title}>Consulta Legal</Text>
         <Text style={styles.description}>
           Calcula el precio de tu consulta legal
@@ -202,12 +219,13 @@ export default function ConsultaLegal() {
               {preguntasRelacionadas[normalizarTexto(tema.trim())][
                 paso - 1
               ].opciones.map((opcion, index) => (
-                <View key={index} style={styles.option}>
-                  <Button
-                    title={opcion}
-                    onPress={() => handleRespuesta(opcion)}
-                  />
-                </View>
+                <TouchableOpacity
+                  key={index}
+                  style={styles.button}
+                  onPress={() => handleRespuesta(opcion)}
+                >
+                  <Text style={styles.buttonText}>{opcion}</Text>
+                </TouchableOpacity>
               ))}
             </View>
           )}
@@ -236,6 +254,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f0f0f0",
+    height: "100vh", // Asegura que ocupe toda la altura de la ventana
+    width: "100%", // Asegura que ocupe todo el ancho
   },
   card: {
     backgroundColor: "white",
@@ -248,6 +268,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginBottom: 15,
   },
   title: {
     fontSize: 24,
@@ -284,19 +309,20 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    marginBottom: 10,
     alignItems: "center",
+    width: "100%",
   },
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize: 16,
+    textAlign: "center",
   },
   question: {
     fontSize: 18,
     marginBottom: 20,
     textAlign: "center",
-  },
-  option: {
-    marginBottom: 10,
   },
   resultContainer: {
     alignItems: "center",
