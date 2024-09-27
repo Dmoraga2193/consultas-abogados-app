@@ -184,7 +184,6 @@ export default function ConsultaLegal() {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        {/* Logo */}
         <Image source={require("./static/logo/logo.png")} style={styles.logo} />
         <Text style={styles.title}>Consulta Legal</Text>
         <Text style={styles.description}>
@@ -238,6 +237,15 @@ export default function ConsultaLegal() {
               Precio estimado de la consulta:
             </Text>
             <Text style={styles.resultPrice}>${precio}</Text>
+
+            {/* Información de contacto del ejecutivo */}
+            <View style={styles.contactCard}>
+              <Text style={styles.contactTitle}>Ejecutivo de Contacto</Text>
+              <Text style={styles.contactText}>Nombre: Juan Pérez</Text>
+              <Text style={styles.contactText}>Teléfono: +56 9 2345 5679</Text>
+              <Text style={styles.contactText}>Email: jperez@abogados.com</Text>
+            </View>
+
             <TouchableOpacity style={styles.button} onPress={reiniciarConsulta}>
               <Text style={styles.buttonText}>Nueva Consulta</Text>
             </TouchableOpacity>
@@ -336,5 +344,27 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "bold",
     marginBottom: 20,
+  },
+  // Estilo para el card de contacto
+  contactCard: {
+    backgroundColor: "#f9f9f9",
+    padding: 15,
+    borderRadius: 8,
+    width: "100%",
+    alignItems: "center",
+    marginTop: 15,
+    marginBottom: 15,
+    borderColor: "#ddd",
+    borderWidth: 1,
+  },
+  contactTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  contactText: {
+    fontSize: 14,
+    color: "#333",
+    marginBottom: 3,
   },
 });
