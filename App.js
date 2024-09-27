@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Platform,
   Image,
+  Linking,
 } from "react-native";
 import Swal from "sweetalert2";
 
@@ -181,6 +182,20 @@ export default function ConsultaLegal() {
     setPrecio(0);
   };
 
+  const contactarPorWhatsApp = () => {
+    const url = `whatsapp://send?phone=+56938706522&text=Hola%20Juan,%20me%20gustaría%20obtener%20más%20información%20sobre%20los%20servicios%20legales.`;
+    Linking.openURL(url).catch(() => {
+      Alert.alert("Error", "No se pudo abrir WhatsApp");
+    });
+  };
+
+  const llamarDirectamente = () => {
+    const phoneNumber = "+56938706522";
+    Linking.openURL(`tel:${phoneNumber}`).catch(() => {
+      Alert.alert("Error", "No se pudo realizar la llamada");
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -242,8 +257,26 @@ export default function ConsultaLegal() {
             <View style={styles.contactCard}>
               <Text style={styles.contactTitle}>Ejecutivo de Contacto</Text>
               <Text style={styles.contactText}>Nombre: Juan Pérez</Text>
-              <Text style={styles.contactText}>Teléfono: +56 9 2345 5679</Text>
+              <Text style={styles.contactText}>Teléfono: +56 9 3870 6522</Text>
               <Text style={styles.contactText}>Email: jperez@abogados.com</Text>
+            </View>
+
+            {/* Botones de contacto */}
+            <View style={styles.contactButtonsContainer}>
+              <TouchableOpacity
+                style={styles.contactButtonWhatsApp}
+                onPress={contactarPorWhatsApp}
+              >
+                <Text style={styles.contactButtonText}>
+                  Hablar por WhatsApp
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.contactButtonLlamar}
+                onPress={llamarDirectamente}
+              >
+                <Text style={styles.contactButtonText}>Llamar</Text>
+              </TouchableOpacity>
             </View>
 
             <TouchableOpacity style={styles.button} onPress={reiniciarConsulta}>
@@ -366,5 +399,24 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#333",
     marginBottom: 3,
+  },
+  contactButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 20,
+    marginBottom: 20,
+    width: "100%",
+  },
+  contactButtonWhatsApp: {
+    backgroundColor: "#25D366", // Verde de WhatsApp
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  contactButtonLlamar: {
+    backgroundColor: "#34B7F1", // Color de llamadas
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
   },
 });
