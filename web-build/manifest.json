@@ -1,0 +1,9 @@
+{
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "lang": "en",
+  "name": "consulta-abogados-app",
+  "short_name": "consulta-abogados-app",
+  "start_url": "/?utm_source=web_app_manifest",
+  "orientation": "portrait"
+}
