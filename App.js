@@ -337,6 +337,27 @@ export default function ConsultaLegal() {
                   <Text style={styles.buttonText}>{opcion}</Text>
                 </TouchableOpacity>
               ))}
+              {/* BARRA DE PROGRESO */}
+              <View style={styles.progressContainer}>
+                <View
+                  style={[
+                    styles.progressBar,
+                    {
+                      width: `${
+                        (paso /
+                          preguntasRelacionadas[normalizarTexto(tema.trim())]
+                            ?.length) *
+                        100
+                      }%`,
+                    },
+                  ]}
+                />
+                <Text style={styles.progressText}>
+                  {paso} /{" "}
+                  {preguntasRelacionadas[normalizarTexto(tema.trim())]?.length}{" "}
+                  Preguntas
+                </Text>
+              </View>
             </View>
           )}
 
@@ -514,5 +535,21 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+  },
+  progressContainer: {
+    height: 10,
+    width: "100%",
+    backgroundColor: "#e0e0df",
+    borderRadius: 5,
+    overflow: "hidden",
+    marginBottom: 10,
+  },
+  progressBar: {
+    height: "100%",
+    backgroundColor: "#4caf50",
+  },
+  progressText: {
+    textAlign: "center",
+    marginTop: 5,
   },
 });
