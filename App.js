@@ -292,6 +292,10 @@ export default function ConsultaLegal() {
     });
   };
 
+  // Cálculo del progreso basado en el paso actual y el número total de preguntas
+  const progreso =
+    paso / (preguntasRelacionadas[normalizarTexto(tema.trim())]?.length || 1);
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -320,6 +324,16 @@ export default function ConsultaLegal() {
           paso <=
             preguntasRelacionadas[normalizarTexto(tema.trim())]?.length && (
             <View>
+              {/* Mostrar barra de progreso */}
+              <View style={styles.progressBarBackground}>
+                <View
+                  style={[
+                    styles.progressBarFill,
+                    { width: `${progreso * 100}%` },
+                  ]}
+                />
+              </View>
+
               <Text style={styles.question}>
                 {
                   preguntasRelacionadas[normalizarTexto(tema.trim())][paso - 1]
@@ -514,5 +528,24 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+  },
+  progressBarBackground: {
+    width: "100%",
+    height: 10,
+    backgroundColor: "#e0e0e0",
+    borderRadius: 5,
+    marginBottom: 20,
+    overflow: "hidden",
+  },
+  progressBarFill: {
+    height: "100%",
+    backgroundColor: "#4CAF50",
+    transition: "width 0.3s ease-in-out",
+    borderRadius: 10, // Bordes redondeados
+  },
+  progressText: {
+    fontSize: 16,
+    marginTop: 10,
+    textAlign: "center",
   },
 });
