@@ -25,7 +25,8 @@
     "react-native-progress": "^5.0.1",
     "react-native-web": "~0.19.10",
     "sweetalert2": "^11.14.1",
-    "typescript": "~5.3.3"
+    "typescript": "~5.3.3",
+    "@react-native-picker/picker": "2.7.5"
   },
   "devDependencies": {
     "@babel/core": "^7.24.0",
