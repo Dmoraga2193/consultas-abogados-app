@@ -9,8 +9,10 @@ import {
   Platform,
   Image,
   Linking,
+  Animated,
 } from "react-native";
 import Swal from "sweetalert2";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const preguntasRelacionadas = {
   "pension alimenticia": [
@@ -247,33 +249,39 @@ export default function ConsultaLegal() {
     }
   };
 
+  // Añade este nuevo estado para la animación
+  const [fadeAnim] = useState(new Animated.Value(0));
+
   const handleRespuesta = (respuesta) => {
     setRespuestas([...respuestas, respuesta]);
     if (paso < preguntasRelacionadas[normalizarTexto(tema.trim())].length) {
       setPaso(paso + 1);
     } else {
-      const precioBase = 100000; // Precio base en pesos chilenos (100 mil)
-
-      // Calcular el precio final basado en las respuestas
+      const precioBase = 100000;
       const precioFinal =
         precioBase +
         respuestas.reduce((acc, resp) => {
           if (resp === "3 o más" || resp === "Alto" || resp === "No") {
-            return acc + 50000; // Incremento de 50 mil
+            return acc + 50000;
           }
-          return acc + 25000; // Incremento de 25 mil
+          return acc + 25000;
         }, 0);
 
-      // Formatear el precio en miles con moneda CLP
       const precioFormateado = new Intl.NumberFormat("es-CL", {
         style: "currency",
         currency: "CLP",
         minimumFractionDigits: 0,
       }).format(precioFinal);
 
-      // Mostrar el precio formateado con el texto "+ IVA"
       setPrecio(`${precioFormateado} + IVA`);
       setPaso(paso + 1);
+
+      // Inicia la animación de fade in
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 1000,
+        useNativeDriver: true,
+      }).start();
     }
   };
 
@@ -363,34 +371,68 @@ export default function ConsultaLegal() {
         {paso >
           (preguntasRelacionadas[normalizarTexto(tema.trim())]?.length ||
             0) && (
-          <View style={styles.resultContainer}>
+          <Animated.View
+            style={[styles.resultContainer, { opacity: fadeAnim }]}
+          >
             <Text style={styles.resultTitle}>
               Precio estimado de la consulta:
             </Text>
             <Text style={styles.resultPrice}>{precio}</Text>
 
-            {/* Información de contacto del ejecutivo */}
             <View style={styles.contactCard}>
               <Text style={styles.contactTitle}>Ejecutivo de Contacto</Text>
-              <Text style={styles.contactText}>Nombre: Juan Pérez</Text>
-              <Text style={styles.contactText}>Teléfono: +56 9 3870 6522</Text>
-              <Text style={styles.contactText}>Email: jperez@abogados.com</Text>
+              <View style={styles.contactInfo}>
+                <Icon
+                  name="account"
+                  size={24}
+                  color="#4CAF50"
+                  style={styles.icon}
+                />
+                <Text style={styles.contactText}>Juan Pérez</Text>
+              </View>
+              <View style={styles.contactInfo}>
+                <Icon
+                  name="phone"
+                  size={24}
+                  color="#2196F3"
+                  style={styles.icon}
+                />
+                <Text style={styles.contactText}>+56 9 3870 6522</Text>
+              </View>
+              <View style={styles.contactInfo}>
+                <Icon
+                  name="email"
+                  size={24}
+                  color="#F44336"
+                  style={styles.icon}
+                />
+                <Text style={styles.contactText}>jperez@abogados.com</Text>
+              </View>
             </View>
 
-            {/* Botones de contacto */}
             <View style={styles.contactButtonsContainer}>
               <TouchableOpacity
                 style={styles.contactButtonWhatsApp}
                 onPress={contactarPorWhatsApp}
               >
-                <Text style={styles.contactButtonText}>
-                  Hablar por WhatsApp
-                </Text>
+                <Icon
+                  name="whatsapp"
+                  size={24}
+                  color="#FFFFFF"
+                  style={styles.buttonIcon}
+                />
+                <Text style={styles.contactButtonText}>WhatsApp</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.contactButtonLlamar}
                 onPress={llamarDirectamente}
               >
+                <Icon
+                  name="phone"
+                  size={24}
+                  color="#FFFFFF"
+                  style={styles.buttonIcon}
+                />
                 <Text style={styles.contactButtonText}>Llamar</Text>
               </TouchableOpacity>
             </View>
@@ -398,7 +440,7 @@ export default function ConsultaLegal() {
             <TouchableOpacity style={styles.button} onPress={reiniciarConsulta}>
               <Text style={styles.buttonText}>Nueva Consulta</Text>
             </TouchableOpacity>
-          </View>
+          </Animated.View>
         )}
       </View>
     </View>
@@ -497,43 +539,69 @@ const styles = StyleSheet.create({
   // Estilo para el card de contacto
   contactCard: {
     backgroundColor: "#f9f9f9",
-    padding: 15,
-    borderRadius: 8,
+    padding: 20,
+    borderRadius: 10,
     width: "100%",
-    alignItems: "center",
-    marginTop: 15,
-    marginBottom: 15,
+    alignItems: "flex-start",
+    marginTop: 20,
+    marginBottom: 20,
     borderColor: "#ddd",
     borderWidth: 1,
   },
   contactTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 5,
+    marginBottom: 15,
+    color: "#333",
+  },
+  contactInfo: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
   },
   contactText: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#333",
-    marginBottom: 3,
+    marginLeft: 10,
+  },
+  icon: {
+    width: 24,
+    height: 24,
   },
   contactButtonsContainer: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
+    width: "100%",
     marginTop: 20,
     marginBottom: 20,
-    width: "100%",
   },
   contactButtonWhatsApp: {
-    backgroundColor: "#25D366", // Verde de WhatsApp
-    paddingVertical: 10,
+    backgroundColor: "#25D366",
+    paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    marginRight: 10,
   },
   contactButtonLlamar: {
-    backgroundColor: "#34B7F1", // Color de llamadas
-    paddingVertical: 10,
+    backgroundColor: "#34B7F1",
+    paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    marginLeft: 10,
+  },
+  contactButtonText: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    fontSize: 16,
+    marginLeft: 8,
   },
   progressBarBackground: {
     width: "100%",
@@ -542,6 +610,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 20,
     overflow: "hidden",
+  },
+  buttonIcon: {
+    marginRight: 8,
   },
   progressBarFill: {
     height: "100%",
