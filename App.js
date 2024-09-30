@@ -559,7 +559,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   button: {
-    backgroundColor: "#000",
+    backgroundColor: "#0870b7", // Color de fondo de reserva en caso de que el degradado no funcione
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -567,6 +567,29 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
   },
+  contactButtonWhatsApp: {
+    backgroundColor: "#25D366", // Color verde de WhatsApp
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    marginRight: 10,
+  },
+  contactButtonLlamar: {
+    backgroundColor: "#34B7F1", // Color azul para Llamar
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+    marginLeft: 10,
+  },
+
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
@@ -630,28 +653,6 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
   },
-  contactButtonWhatsApp: {
-    backgroundColor: "#25D366",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-    marginRight: 10,
-  },
-  contactButtonLlamar: {
-    backgroundColor: "#34B7F1",
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
-    marginLeft: 10,
-  },
   contactButtonText: {
     color: "#FFFFFF",
     fontWeight: "bold",
@@ -671,7 +672,7 @@ const styles = StyleSheet.create({
   },
   progressBarFill: {
     height: "100%",
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#f5c50c",
     transition: "width 0.3s ease-in-out",
     borderRadius: 10, // Bordes redondeados
   },
