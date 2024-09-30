@@ -4,7 +4,7 @@
     "slug": "consulta-abogados-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./static/logo/logo.png",
+    "icon": "./static/logo/logo_2.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -21,9 +21,10 @@
       }
     },
     "web": {
-      "favicon": "./static/logo/logo.png",
+      "favicon": "./static/logo/logo_2.png",
       "bundler": "metro",
-      "output": "static"
+      "output": "static",
+      "name": "consulta-abogados-app"
     },
     "extra": {
       "eas": {

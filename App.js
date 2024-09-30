@@ -205,17 +205,46 @@ const preguntasRelacionadas = {
 };
 
 const normalizarTexto = (texto) => {
-  return texto
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "") // Eliminar tildes
-    .toLowerCase()
-    .replace(/\blaborales\b/, "laboral") // Convertir "laborales" a "laboral"
-    .replace(/\bacosos\b/, "acoso") // Convertir "acosos" a "acoso"
-    .replace(/\bpropiedades\b/, "propiedad") // Convertir "propiedades" a "propiedad"
-    .replace(/\bintelectuales\b/, "intelectual") // Convertir "intelectuales" a "intelectual"
-    .replace(/\bpensiones\b/, "pension") // Convertir "pensiones" a "pension"
-    .replace(/\badopciones\b/, "adopcion") // Convertir "adopciones" a "adopcion"
-    .replace(/s$/, ""); // Eliminar la "s" al final de la palabra, si existe
+  return (
+    texto
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // Eliminar tildes
+      .toLowerCase()
+      // Correcciones ortográficas comunes
+      .replace(/\bpencion\b/, "pension") // Corregir "pencion" a "pension"
+      .replace(/\balimentisia\b/, "alimenticia") // Corregir "alimentisia" a "alimenticia"
+      .replace(/\balimentisias\b/, "alimenticia") // Corregir plural con error
+      .replace(/\bdivorcios\b/, "divorcio") // Corregir "divorcios" a "divorcio"
+      .replace(/\bdivorsio\b/, "divorcio") // Corregir "divorsio" a "divorcio"
+      .replace(/\berensia\b/, "herencia") // Corregir "erensia" a "herencia"
+      .replace(/\berencias\b/, "herencia") // Corregir "erencias" a "herencia"
+      .replace(/\bsucesion\b/, "herencia") // Corregir "sucesion" a "herencia"
+      .replace(/\bsucesiones\b/, "herencia") // Corregir plural con error
+      .replace(/\bcontrato de arrendaminto\b/, "contrato de arrendamiento") // Corregir "arrendaminto"
+      .replace(/\barrendaminto\b/, "arrendamiento") // Error ortográfico común en arrendamiento
+      .replace(/\bdespidos laborales\b/, "despido laboral") // Corregir plural con error
+      .replace(/\bdesspido\b/, "despido") // Error común en "despido"
+      .replace(/\bacoso laboral\b/, "acoso laboral") // Variante correcta de "acoso laboral"
+      .replace(/\bacosos laborales\b/, "acoso laboral") // Corregir plural con error
+      .replace(/\bacidente de transito\b/, "accidente de transito") // Corregir "acidente" a "accidente"
+      .replace(/\btransito\b/, "tránsito") // Añadir tilde en "tránsito"
+      .replace(/\bacidentes de transito\b/, "accidente de tránsito") // Corregir plural
+      .replace(/\badopsion\b/, "adopcion") // Corregir "adopsion" a "adopcion"
+      .replace(/\badopciones\b/, "adopcion") // Corregir plural con error
+      .replace(/\bviolencia domestica\b/, "violencia domestica") // Corregir falta de tilde en "doméstica"
+      .replace(/\bviolencias domesticas\b/, "violencia domestica") // Corregir plural con error
+      .replace(/\bpropiedad intelectual\b/, "propiedad intelectual") // Variante correcta de "propiedad intelectual"
+      .replace(/\bpropiedades intelectuales\b/, "propiedad intelectual") // Corregir plural con error
+      // Correcciones adicionales en plurales
+      .replace(/\blaborales\b/, "laboral")
+      .replace(/\bacosos\b/, "acoso")
+      .replace(/\bpropiedades\b/, "propiedad")
+      .replace(/\bintelectuales\b/, "intelectual")
+      .replace(/\bpensiones\b/, "pension")
+      .replace(/\badopciones\b/, "adopcion")
+      .replace(/\baccidentes\b/, "accidente")
+      .replace(/s$/, "") // Eliminar la "s" al final de la palabra, si existe
+  );
 };
 
 export default function ConsultaLegal() {
@@ -229,6 +258,12 @@ export default function ConsultaLegal() {
 
     if (temaNormalizado in preguntasRelacionadas) {
       setPaso(1);
+      // Iniciar la animación de fade in cuando se haga clic en "Iniciar Consulta"
+      Animated.timing(fadeAnim, {
+        toValue: 1, // La vista se hace completamente visible
+        duration: 500, // Duración de la animación en milisegundos
+        useNativeDriver: true, // Mejora el rendimiento
+      }).start();
     } else {
       if (Platform.OS === "web") {
         // Usar SweetAlert en web con heightAuto: false para evitar el desplazamiento
@@ -279,7 +314,7 @@ export default function ConsultaLegal() {
       // Inicia la animación de fade in
       Animated.timing(fadeAnim, {
         toValue: 1,
-        duration: 1000,
+        duration: 500,
         useNativeDriver: true,
       }).start();
     }
@@ -313,7 +348,12 @@ export default function ConsultaLegal() {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Image source={require("./static/logo/logo.png")} style={styles.logo} />
+        <View style={styles.iconContainer}>
+          <Image
+            source={require("./static/logo/logo_2.png")}
+            style={styles.logo}
+          />
+        </View>
         <Text style={styles.title}>Consulta Legal</Text>
         <Text style={styles.description}>
           Calcula el precio de tu consulta legal
@@ -337,35 +377,38 @@ export default function ConsultaLegal() {
         {paso > 0 &&
           paso <=
             preguntasRelacionadas[normalizarTexto(tema.trim())]?.length && (
-            <View>
-              {/* Mostrar barra de progreso */}
-              <View style={styles.progressBarBackground}>
-                <View
-                  style={[
-                    styles.progressBarFill,
-                    { width: `${progreso * 100}%` },
-                  ]}
-                />
-              </View>
+            <Animated.View style={{ opacity: fadeAnim }}>
+              <View>
+                {/* Mostrar barra de progreso */}
+                <View style={styles.progressBarBackground}>
+                  <View
+                    style={[
+                      styles.progressBarFill,
+                      { width: `${progreso * 100}%` },
+                    ]}
+                  />
+                </View>
 
-              <Text style={styles.question}>
-                {
-                  preguntasRelacionadas[normalizarTexto(tema.trim())][paso - 1]
-                    ?.texto
-                }
-              </Text>
-              {preguntasRelacionadas[normalizarTexto(tema.trim())][
-                paso - 1
-              ]?.opciones.map((opcion, index) => (
-                <TouchableOpacity
-                  key={index}
-                  style={styles.button}
-                  onPress={() => handleRespuesta(opcion)}
-                >
-                  <Text style={styles.buttonText}>{opcion}</Text>
-                </TouchableOpacity>
-              ))}
-            </View>
+                <Text style={styles.question}>
+                  {
+                    preguntasRelacionadas[normalizarTexto(tema.trim())][
+                      paso - 1
+                    ]?.texto
+                  }
+                </Text>
+                {preguntasRelacionadas[normalizarTexto(tema.trim())][
+                  paso - 1
+                ]?.opciones.map((opcion, index) => (
+                  <TouchableOpacity
+                    key={index}
+                    style={styles.button}
+                    onPress={() => handleRespuesta(opcion)}
+                  >
+                    <Text style={styles.buttonText}>{opcion}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </Animated.View>
           )}
 
         {paso >
@@ -383,7 +426,7 @@ export default function ConsultaLegal() {
               <Text style={styles.contactTitle}>Ejecutivo de Contacto</Text>
               <View style={styles.contactInfo}>
                 <MaterialCommunityIcons
-                  name="account"
+                  name="account-outline"
                   size={24}
                   color="#4CAF50"
                   style={styles.buttonIcon}
@@ -392,7 +435,7 @@ export default function ConsultaLegal() {
               </View>
               <View style={styles.contactInfo}>
                 <MaterialCommunityIcons
-                  name="phone"
+                  name="phone-outline"
                   size={24}
                   color="#2196F3"
                   style={styles.buttonIcon}
@@ -401,7 +444,7 @@ export default function ConsultaLegal() {
               </View>
               <View style={styles.contactInfo}>
                 <MaterialCommunityIcons
-                  name="email"
+                  name="email-outline"
                   size={24}
                   color="#F44336"
                   style={styles.buttonIcon}
@@ -428,7 +471,7 @@ export default function ConsultaLegal() {
                 onPress={llamarDirectamente}
               >
                 <MaterialCommunityIcons
-                  name="phone"
+                  name="phone-outline"
                   size={24}
                   color="#FFFFFF"
                   style={styles.buttonIcon}
@@ -469,9 +512,21 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   logo: {
-    width: 40,
-    height: 40,
-    marginBottom: 15,
+    width: 80,
+    height: 80,
+  },
+  iconContainer: {
+    position: "absolute",
+    top: -85, // Aumenta este valor para que el icono se fusione más con el contenido
+    alignSelf: "center",
+    backgroundColor: "#ffffff", // Mantén el color para hacer contraste con el fondo
+    borderRadius: 50,
+    padding: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
   },
   title: {
     fontSize: 24,
