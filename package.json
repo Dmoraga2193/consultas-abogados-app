@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.2.3",
+    "@expo/vector-icons": "^14.0.3",
     "@types/react": "^18.3.9",
     "@types/react-native": "^0.72.8",
     "axios": "^1.7.7",
+    "crypto-browserify": "^3.12.0",
     "expo": "^51.0.34",
     "expo-status-bar": "~1.12.1",
     "react": "18.2.0",

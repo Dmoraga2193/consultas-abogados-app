@@ -12,7 +12,7 @@ import {
   Animated,
 } from "react-native";
 import Swal from "sweetalert2";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const preguntasRelacionadas = {
   "pension alimenticia": [
@@ -382,29 +382,29 @@ export default function ConsultaLegal() {
             <View style={styles.contactCard}>
               <Text style={styles.contactTitle}>Ejecutivo de Contacto</Text>
               <View style={styles.contactInfo}>
-                <Icon
+                <MaterialCommunityIcons
                   name="account"
                   size={24}
                   color="#4CAF50"
-                  style={styles.icon}
+                  style={styles.buttonIcon}
                 />
                 <Text style={styles.contactText}>Juan Pérez</Text>
               </View>
               <View style={styles.contactInfo}>
-                <Icon
+                <MaterialCommunityIcons
                   name="phone"
                   size={24}
                   color="#2196F3"
-                  style={styles.icon}
+                  style={styles.buttonIcon}
                 />
                 <Text style={styles.contactText}>+56 9 3870 6522</Text>
               </View>
               <View style={styles.contactInfo}>
-                <Icon
+                <MaterialCommunityIcons
                   name="email"
                   size={24}
                   color="#F44336"
-                  style={styles.icon}
+                  style={styles.buttonIcon}
                 />
                 <Text style={styles.contactText}>jperez@abogados.com</Text>
               </View>
@@ -415,7 +415,7 @@ export default function ConsultaLegal() {
                 style={styles.contactButtonWhatsApp}
                 onPress={contactarPorWhatsApp}
               >
-                <Icon
+                <MaterialCommunityIcons
                   name="whatsapp"
                   size={24}
                   color="#FFFFFF"
@@ -427,7 +427,7 @@ export default function ConsultaLegal() {
                 style={styles.contactButtonLlamar}
                 onPress={llamarDirectamente}
               >
-                <Icon
+                <MaterialCommunityIcons
                   name="phone"
                   size={24}
                   color="#FFFFFF"
