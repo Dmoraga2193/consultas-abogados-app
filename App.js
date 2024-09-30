@@ -202,12 +202,18 @@ const preguntasRelacionadas = {
   ],
 };
 
-// Función para normalizar texto y eliminar tildes
 const normalizarTexto = (texto) => {
   return texto
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
+    .replace(/[\u0300-\u036f]/g, "") // Eliminar tildes
+    .toLowerCase()
+    .replace(/\blaborales\b/, "laboral") // Convertir "laborales" a "laboral"
+    .replace(/\bacosos\b/, "acoso") // Convertir "acosos" a "acoso"
+    .replace(/\bpropiedades\b/, "propiedad") // Convertir "propiedades" a "propiedad"
+    .replace(/\bintelectuales\b/, "intelectual") // Convertir "intelectuales" a "intelectual"
+    .replace(/\bpensiones\b/, "pension") // Convertir "pensiones" a "pension"
+    .replace(/\badopciones\b/, "adopcion") // Convertir "adopciones" a "adopcion"
+    .replace(/s$/, ""); // Eliminar la "s" al final de la palabra, si existe
 };
 
 export default function ConsultaLegal() {
