@@ -21,7 +21,9 @@
       }
     },
     "web": {
-      "favicon": "./static/logo/logo.png"
+      "favicon": "./static/logo/logo.png",
+      "bundler": "metro",
+      "output": "static"
     },
     "extra": {
       "eas": {
