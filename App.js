@@ -10,9 +10,11 @@ import {
   Image,
   Linking,
   Animated,
+  ImageBackground,
 } from "react-native";
 import Swal from "sweetalert2";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import fondo from "./static/logo/fondo.jpg";
 
 const preguntasRelacionadas = {
   "pension alimenticia": [
@@ -346,159 +348,183 @@ export default function ConsultaLegal() {
     paso / (preguntasRelacionadas[normalizarTexto(tema.trim())]?.length || 1);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <View style={styles.iconContainer}>
-          <Image
-            source={require("./static/logo/logo_2.png")}
-            style={styles.logo}
-          />
-        </View>
-        <Text style={styles.title}>Consulta Legal</Text>
-        <Text style={styles.description}>
-          Calcula el precio de tu consulta legal
-        </Text>
+    <ImageBackground source={fondo} style={styles.background}>
+      <View style={styles.overlay}>
+        <View style={styles.container}>
+          <View style={styles.card}>
+            <View style={styles.iconContainer}>
+              <Image
+                source={require("./static/logo/logo_2.png")}
+                style={styles.logo}
+              />
+            </View>
+            <Text style={styles.title}>Consulta Legal</Text>
+            <Text style={styles.description}>
+              Calcula el precio de tu consulta legal
+            </Text>
 
-        {paso === 0 && (
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Tema de consulta</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Ej. Pensión alimenticia"
-              value={tema}
-              onChangeText={(text) => setTema(text)}
-            />
-            <TouchableOpacity style={styles.button} onPress={handleSubmit}>
-              <Text style={styles.buttonText}>Iniciar Consulta</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+            {paso === 0 && (
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>Tema de consulta</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Ej. Pensión alimenticia"
+                  value={tema}
+                  onChangeText={(text) => setTema(text)}
+                />
+                <TouchableOpacity style={styles.button} onPress={handleSubmit}>
+                  <Text style={styles.buttonText}>Iniciar Consulta</Text>
+                </TouchableOpacity>
+              </View>
+            )}
 
-        {paso > 0 &&
-          paso <=
-            preguntasRelacionadas[normalizarTexto(tema.trim())]?.length && (
-            <Animated.View style={{ opacity: fadeAnim }}>
-              <View>
-                {/* Mostrar barra de progreso */}
-                <View style={styles.progressBarBackground}>
-                  <View
-                    style={[
-                      styles.progressBarFill,
-                      { width: `${progreso * 100}%` },
-                    ]}
-                  />
+            {paso > 0 &&
+              paso <=
+                preguntasRelacionadas[normalizarTexto(tema.trim())]?.length && (
+                <Animated.View style={{ opacity: fadeAnim }}>
+                  <View>
+                    {/* Mostrar barra de progreso */}
+                    <View style={styles.progressBarBackground}>
+                      <View
+                        style={[
+                          styles.progressBarFill,
+                          { width: `${progreso * 100}%` },
+                        ]}
+                      />
+                    </View>
+
+                    <Text style={styles.question}>
+                      {
+                        preguntasRelacionadas[normalizarTexto(tema.trim())][
+                          paso - 1
+                        ]?.texto
+                      }
+                    </Text>
+                    {preguntasRelacionadas[normalizarTexto(tema.trim())][
+                      paso - 1
+                    ]?.opciones.map((opcion, index) => (
+                      <TouchableOpacity
+                        key={index}
+                        style={styles.button}
+                        onPress={() => handleRespuesta(opcion)}
+                      >
+                        <Text style={styles.buttonText}>{opcion}</Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                </Animated.View>
+              )}
+
+            {paso >
+              (preguntasRelacionadas[normalizarTexto(tema.trim())]?.length ||
+                0) && (
+              <Animated.View
+                style={[styles.resultContainer, { opacity: fadeAnim }]}
+              >
+                <Text style={styles.resultTitle}>
+                  Precio estimado de la consulta:
+                </Text>
+                <Text style={styles.resultPrice}>{precio}</Text>
+
+                <View style={styles.contactCard}>
+                  <Text style={styles.contactTitle}>Ejecutivo de Contacto</Text>
+                  <View style={styles.contactInfo}>
+                    <MaterialCommunityIcons
+                      name="account-outline"
+                      size={24}
+                      color="#4CAF50"
+                      style={styles.buttonIcon}
+                    />
+                    <Text style={styles.contactText}>Juan Pérez</Text>
+                  </View>
+                  <View style={styles.contactInfo}>
+                    <MaterialCommunityIcons
+                      name="phone-outline"
+                      size={24}
+                      color="#2196F3"
+                      style={styles.buttonIcon}
+                    />
+                    <Text style={styles.contactText}>+56 9 3870 6522</Text>
+                  </View>
+                  <View style={styles.contactInfo}>
+                    <MaterialCommunityIcons
+                      name="email-outline"
+                      size={24}
+                      color="#F44336"
+                      style={styles.buttonIcon}
+                    />
+                    <Text style={styles.contactText}>jperez@abogados.com</Text>
+                  </View>
                 </View>
 
-                <Text style={styles.question}>
-                  {
-                    preguntasRelacionadas[normalizarTexto(tema.trim())][
-                      paso - 1
-                    ]?.texto
-                  }
-                </Text>
-                {preguntasRelacionadas[normalizarTexto(tema.trim())][
-                  paso - 1
-                ]?.opciones.map((opcion, index) => (
+                <View style={styles.contactButtonsContainer}>
                   <TouchableOpacity
-                    key={index}
-                    style={styles.button}
-                    onPress={() => handleRespuesta(opcion)}
+                    style={styles.contactButtonWhatsApp}
+                    onPress={contactarPorWhatsApp}
                   >
-                    <Text style={styles.buttonText}>{opcion}</Text>
+                    <MaterialCommunityIcons
+                      name="whatsapp"
+                      size={24}
+                      color="#FFFFFF"
+                      style={styles.buttonIcon}
+                    />
+                    <Text style={styles.contactButtonText}>WhatsApp</Text>
                   </TouchableOpacity>
-                ))}
-              </View>
-            </Animated.View>
-          )}
+                  <TouchableOpacity
+                    style={styles.contactButtonLlamar}
+                    onPress={llamarDirectamente}
+                  >
+                    <MaterialCommunityIcons
+                      name="phone-outline"
+                      size={24}
+                      color="#FFFFFF"
+                      style={styles.buttonIcon}
+                    />
+                    <Text style={styles.contactButtonText}>Llamar</Text>
+                  </TouchableOpacity>
+                </View>
 
-        {paso >
-          (preguntasRelacionadas[normalizarTexto(tema.trim())]?.length ||
-            0) && (
-          <Animated.View
-            style={[styles.resultContainer, { opacity: fadeAnim }]}
-          >
-            <Text style={styles.resultTitle}>
-              Precio estimado de la consulta:
-            </Text>
-            <Text style={styles.resultPrice}>{precio}</Text>
-
-            <View style={styles.contactCard}>
-              <Text style={styles.contactTitle}>Ejecutivo de Contacto</Text>
-              <View style={styles.contactInfo}>
-                <MaterialCommunityIcons
-                  name="account-outline"
-                  size={24}
-                  color="#4CAF50"
-                  style={styles.buttonIcon}
-                />
-                <Text style={styles.contactText}>Juan Pérez</Text>
-              </View>
-              <View style={styles.contactInfo}>
-                <MaterialCommunityIcons
-                  name="phone-outline"
-                  size={24}
-                  color="#2196F3"
-                  style={styles.buttonIcon}
-                />
-                <Text style={styles.contactText}>+56 9 3870 6522</Text>
-              </View>
-              <View style={styles.contactInfo}>
-                <MaterialCommunityIcons
-                  name="email-outline"
-                  size={24}
-                  color="#F44336"
-                  style={styles.buttonIcon}
-                />
-                <Text style={styles.contactText}>jperez@abogados.com</Text>
-              </View>
-            </View>
-
-            <View style={styles.contactButtonsContainer}>
-              <TouchableOpacity
-                style={styles.contactButtonWhatsApp}
-                onPress={contactarPorWhatsApp}
-              >
-                <MaterialCommunityIcons
-                  name="whatsapp"
-                  size={24}
-                  color="#FFFFFF"
-                  style={styles.buttonIcon}
-                />
-                <Text style={styles.contactButtonText}>WhatsApp</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.contactButtonLlamar}
-                onPress={llamarDirectamente}
-              >
-                <MaterialCommunityIcons
-                  name="phone-outline"
-                  size={24}
-                  color="#FFFFFF"
-                  style={styles.buttonIcon}
-                />
-                <Text style={styles.contactButtonText}>Llamar</Text>
-              </TouchableOpacity>
-            </View>
-
-            <TouchableOpacity style={styles.button} onPress={reiniciarConsulta}>
-              <Text style={styles.buttonText}>Nueva Consulta</Text>
-            </TouchableOpacity>
-          </Animated.View>
-        )}
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={reiniciarConsulta}
+                >
+                  <Text style={styles.buttonText}>Nueva Consulta</Text>
+                </TouchableOpacity>
+              </Animated.View>
+            )}
+          </View>
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    resizeMode: "cover", // Opción para que la imagen se ajuste al tamaño
+    justifyContent: "center",
+  },
+  overlay: {
+    position: "absolute", // Asegura que el componente se posicione sobre toda la pantalla
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(255, 255, 255, 0.8)", // Fondo blanco semitransparente
+    padding: 20,
+    justifyContent: "center", // Centra el contenido verticalmente
+    alignItems: "center", // Centra el contenido horizontalmente
+  },
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f0f0f0",
-    height: "100vh", // Asegura que ocupe toda la altura de la ventana
-    width: "100%", // Asegura que ocupe todo el ancho
+
+    // Asegura que ocupe toda la altura de la ventana
+    // Asegura que ocupe todo el ancho
   },
+
   card: {
     backgroundColor: "white",
     padding: 20,
