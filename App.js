@@ -12,100 +12,79 @@ import {
   Animated,
   ImageBackground,
 } from "react-native";
-import Swal from "sweetalert2";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import fondo from "./static/logo/fondo.jpg";
-import { Picker } from "@react-native-picker/picker"; // Importar Picker para crear un menú desplegable
+import Swal from "sweetalert2"; // SweetAlert para alertas en la web
+import { MaterialCommunityIcons } from "@expo/vector-icons"; // Iconos
+import fondo from "./static/logo/fondo.jpg"; // Fondo de imagen
 import preguntasRelacionadas from "./preguntasRelacionadas"; // Importar preguntas desde otro archivo
 import styles from "./styles"; // Importar estilos desde otro archivo
 
-// Función para normalizar el texto y corregir errores ortográficos comunes
+// Normaliza el texto ingresado para evitar errores ortográficos y de formato
 const normalizarTexto = (texto) => {
   return (
     texto
-      .normalize("NFD") // Normalizar el texto para manejar caracteres especiales
-      .replace(/[\u0300-\u036f]/g, "") // Eliminar tildes
-      .toLowerCase() // Convertir todo el texto a minúsculas
-      // Correcciones ortográficas comunes en las consultas
-      .replace(/\bpencion\b/, "pension")
-      .replace(/\balimentisia\b/, "alimenticia")
-    // ... otras correcciones ortográficas
-  );
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "") // Elimina tildes
+      .toLowerCase()
+      .replace(/\bpencion\b/, "pension") // Correcciones ortográficas comunes
+      // ...otros reemplazos
+      .replace(/s$/, "")
+  ); // Elimina la "s" al final si es un plural
 };
 
-// Función para capitalizar la primera letra de cada palabra en el menú
-const capitalizeFirstLetter = (string) => {
-  return string.charAt(0).toUpperCase() + string.slice(1); // Capitaliza la primera letra
-};
-
-// Componente principal para gestionar las consultas legales
 export default function ConsultaLegal() {
-  // Estados para el tema, paso actual, respuestas seleccionadas y el precio
-  const [tema, setTema] = useState(""); // Almacena el tema seleccionado
-  const [paso, setPaso] = useState(0); // Almacena el paso actual en el proceso de preguntas
-  const [respuestas, setRespuestas] = useState([]); // Almacena las respuestas seleccionadas
-  const [precio, setPrecio] = useState(0); // Almacena el precio calculado para la consulta
+  const [tema, setTema] = useState(""); // Tema seleccionado
+  const [paso, setPaso] = useState(0); // Paso actual en el flujo de preguntas
+  const [respuestas, setRespuestas] = useState([]); // Respuestas seleccionadas
+  const [precio, setPrecio] = useState(0); // Precio calculado
+  const [fadeAnim] = useState(new Animated.Value(0)); // Animación de fade in
 
-  // Función para iniciar el proceso de consulta
+  // Maneja el envío del tema seleccionado
   const handleSubmit = () => {
-    const temaNormalizado = normalizarTexto(tema.trim()); // Normalizar el texto del tema
+    const temaNormalizado = normalizarTexto(tema.trim());
 
     if (temaNormalizado in preguntasRelacionadas) {
-      setPaso(1); // Avanza al primer paso de la consulta
-      // Iniciar la animación de fade in cuando se haga clic en "Iniciar Consulta"
+      setPaso(1);
       Animated.timing(fadeAnim, {
-        toValue: 1, // La vista se hace completamente visible
-        duration: 500, // Duración de la animación en milisegundos
-        useNativeDriver: true, // Mejora el rendimiento
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
       }).start();
     } else {
-      // Mostrar un mensaje de error si no se selecciona un tema válido
-      if (Platform.OS === "web") {
-        Swal.fire({
-          title: "Lo siento",
-          text: "Necesitas seleccionar una consulta válida para continuar.",
-          icon: "error",
-          confirmButtonText: "OK",
-          heightAuto: false,
-        });
-      } else {
-        Alert.alert(
-          "Lo siento",
-          "Necesitas seleccionar una consulta válida para continuar."
-        );
-      }
+      Platform.OS === "web"
+        ? Swal.fire({
+            title: "Lo siento",
+            text: "No tenemos información sobre ese tema específico.",
+            icon: "error",
+            confirmButtonText: "OK",
+            heightAuto: false,
+          })
+        : Alert.alert(
+            "Lo siento",
+            "No tenemos información sobre ese tema específico."
+          );
     }
   };
 
-  // Estado para gestionar la animación de las vistas
-  const [fadeAnim] = useState(new Animated.Value(0));
-
-  // Función para manejar la selección de respuestas
+  // Maneja la selección de respuestas
   const handleRespuesta = (respuesta) => {
-    const nuevasRespuestas = [...respuestas, respuesta]; // Incluir la respuesta actual
-
+    const nuevasRespuestas = [...respuestas, respuesta]; // Agrega la nueva respuesta
     const temaNormalizado = normalizarTexto(tema.trim());
 
-    // Si aún hay preguntas por mostrar, avanzamos al siguiente paso
+    // Avanza al siguiente paso o calcula el precio final
     if (paso < preguntasRelacionadas[temaNormalizado].length) {
       setPaso(paso + 1);
-      setRespuestas(nuevasRespuestas); // Guardar las respuestas acumuladas
+      setRespuestas(nuevasRespuestas);
     } else {
-      // Cuando se responden todas las preguntas, calcular el precio
+      // Calcula el precio basado en las respuestas seleccionadas
       const precioBase = 100000;
-
-      // Sumar valores adicionales en base a las respuestas
       const precioAdicional = nuevasRespuestas.reduce((acc, resp) => {
         if (resp === "3 o más" || resp === "Alto" || resp === "No") {
-          return acc + 50000; // Suma 50,000 si la respuesta es "3 o más", "Alto" o "No"
+          return acc + 50000;
         }
-        return acc + 25000; // De lo contrario, suma 25,000
+        return acc + 25000;
       }, 0);
 
-      // Calcular el precio total
       const precioFinal = precioBase + precioAdicional;
-
-      // Formatear y mostrar el precio en el formato adecuado
       setPrecio(
         new Intl.NumberFormat("es-CL", {
           style: "currency",
@@ -114,7 +93,6 @@ export default function ConsultaLegal() {
         }).format(precioFinal) + " + IVA"
       );
 
-      // Avanzar para mostrar el resultado y activar la animación
       setPaso(paso + 1);
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -124,16 +102,15 @@ export default function ConsultaLegal() {
     }
   };
 
-  // Función para reiniciar la consulta y volver al estado inicial
+  // Reinicia la consulta
   const reiniciarConsulta = () => {
-    setTema(""); // Reiniciar el tema seleccionado
-    setPaso(0); // Reiniciar el contador de pasos
-    setRespuestas([]); // Vaciar las respuestas
-    setPrecio(0); // Reiniciar el precio
-    fadeAnim.setValue(0); // Reiniciar la animación
+    setTema("");
+    setPaso(0);
+    setRespuestas([]);
+    setPrecio(0);
   };
 
-  // Función para contactar vía WhatsApp
+  // Enviar mensaje por WhatsApp
   const contactarPorWhatsApp = () => {
     const url = `whatsapp://send?phone=+56938706522&text=Hola%20Juan,%20me%20gustaría%20obtener%20más%20información%20sobre%20los%20servicios%20legales.`;
     Linking.openURL(url).catch(() => {
@@ -141,7 +118,7 @@ export default function ConsultaLegal() {
     });
   };
 
-  // Función para realizar una llamada telefónica directamente
+  // Llamada directa
   const llamarDirectamente = () => {
     const phoneNumber = "+56938706522";
     Linking.openURL(`tel:${phoneNumber}`).catch(() => {
@@ -149,7 +126,7 @@ export default function ConsultaLegal() {
     });
   };
 
-  // Calcular el progreso basado en el número de preguntas respondidas y el total de preguntas
+  // Cálculo del progreso de las preguntas
   const progreso =
     paso / (preguntasRelacionadas[normalizarTexto(tema.trim())]?.length || 1);
 
@@ -158,74 +135,61 @@ export default function ConsultaLegal() {
       <View style={styles.overlay}>
         <View style={styles.container}>
           <View style={styles.card}>
-            {/* Icono de la consulta */}
+            {/* Logo y título */}
             <View style={styles.iconContainer}>
               <Image
                 source={require("./static/logo/logo_2.png")}
                 style={styles.logo}
               />
             </View>
-
-            {/* Título y descripción */}
             <Text style={styles.title}>Consulta Legal</Text>
             <Text style={styles.description}>
               Calcula el precio de tu consulta legal
             </Text>
 
-            {/* Selección de tema de consulta */}
+            {/* Selección del tema inicial */}
             {paso === 0 && (
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Tema de consulta</Text>
-                <Picker
-                  selectedValue={tema}
-                  style={styles.picker}
-                  onValueChange={(itemValue) => setTema(itemValue)}
-                >
-                  <Picker.Item label="Selecciona un tema" value="" />
-                  {Object.keys(preguntasRelacionadas)
-                    .sort() // Ordenar los temas alfabéticamente
-                    .map((tema, index) => (
-                      <Picker.Item
-                        key={index}
-                        label={capitalizeFirstLetter(tema)} // Mostrar el tema con la primera letra en mayúscula
-                        value={tema}
-                      />
-                    ))}
-                </Picker>
-
-                {/* Botón para iniciar la consulta */}
+                <TextInput
+                  style={styles.input}
+                  placeholder="Ej. Pensión alimenticia"
+                  value={tema}
+                  onChangeText={(text) => setTema(text)}
+                />
                 <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                   <Text style={styles.buttonText}>Iniciar Consulta</Text>
                 </TouchableOpacity>
               </View>
             )}
 
-            {/* Si hay más pasos por seguir, mostrar las preguntas */}
-            {paso > 0 && paso <= preguntasRelacionadas[tema]?.length && (
-              <Animated.View style={{ opacity: fadeAnim }}>
-                <View>
-                  {/* Barra de progreso */}
-                  <View style={styles.progressBarBackground}>
-                    <View
-                      style={[
-                        styles.progressBarFill,
-                        {
-                          width: `${
-                            (paso / preguntasRelacionadas[tema].length) * 100
-                          }%`,
-                        },
-                      ]}
-                    />
-                  </View>
+            {/* Preguntas relacionadas */}
+            {paso > 0 &&
+              paso <=
+                preguntasRelacionadas[normalizarTexto(tema.trim())]?.length && (
+                <Animated.View style={{ opacity: fadeAnim }}>
+                  <View>
+                    {/* Barra de progreso */}
+                    <View style={styles.progressBarBackground}>
+                      <View
+                        style={[
+                          styles.progressBarFill,
+                          { width: `${progreso * 100}%` },
+                        ]}
+                      />
+                    </View>
 
-                  {/* Mostrar la pregunta actual */}
-                  <Text style={styles.question}>
-                    {preguntasRelacionadas[tema][paso - 1]?.texto}
-                  </Text>
-
-                  {/* Mostrar las opciones de respuesta */}
-                  {preguntasRelacionadas[tema][paso - 1]?.opciones.map(
-                    (opcion, index) => (
+                    {/* Pregunta actual */}
+                    <Text style={styles.question}>
+                      {
+                        preguntasRelacionadas[normalizarTexto(tema.trim())][
+                          paso - 1
+                        ]?.texto
+                      }
+                    </Text>
+                    {preguntasRelacionadas[normalizarTexto(tema.trim())][
+                      paso - 1
+                    ]?.opciones.map((opcion, index) => (
                       <TouchableOpacity
                         key={index}
                         style={styles.button}
@@ -233,14 +197,14 @@ export default function ConsultaLegal() {
                       >
                         <Text style={styles.buttonText}>{opcion}</Text>
                       </TouchableOpacity>
-                    )
-                  )}
-                </View>
-              </Animated.View>
-            )}
+                    ))}
+                  </View>
+                </Animated.View>
+              )}
 
-            {/* Mostrar el resultado del precio al final de las preguntas */}
-            {paso > preguntasRelacionadas[tema]?.length && (
+            {/* Resultado del cálculo del precio */}
+            {paso >
+              preguntasRelacionadas[normalizarTexto(tema.trim())]?.length && (
               <Animated.View
                 style={[styles.resultContainer, { opacity: fadeAnim }]}
               >
@@ -249,7 +213,7 @@ export default function ConsultaLegal() {
                 </Text>
                 <Text style={styles.resultPrice}>{precio}</Text>
 
-                {/* Mostrar información de contacto */}
+                {/* Información de contacto */}
                 <View style={styles.contactCard}>
                   <Text style={styles.contactTitle}>Ejecutivo de Contacto</Text>
                   <View style={styles.contactInfo}>
@@ -257,7 +221,6 @@ export default function ConsultaLegal() {
                       name="account-outline"
                       size={24}
                       color="#4CAF50"
-                      style={styles.buttonIcon}
                     />
                     <Text style={styles.contactText}>Juan Pérez</Text>
                   </View>
@@ -266,7 +229,6 @@ export default function ConsultaLegal() {
                       name="phone-outline"
                       size={24}
                       color="#2196F3"
-                      style={styles.buttonIcon}
                     />
                     <Text style={styles.contactText}>+56 9 3870 6522</Text>
                   </View>
@@ -275,7 +237,6 @@ export default function ConsultaLegal() {
                       name="email-outline"
                       size={24}
                       color="#F44336"
-                      style={styles.buttonIcon}
                     />
                     <Text style={styles.contactText}>jperez@abogados.com</Text>
                   </View>
@@ -291,7 +252,6 @@ export default function ConsultaLegal() {
                       name="whatsapp"
                       size={24}
                       color="#FFFFFF"
-                      style={styles.buttonIcon}
                     />
                     <Text style={styles.contactButtonText}>WhatsApp</Text>
                   </TouchableOpacity>
@@ -303,7 +263,6 @@ export default function ConsultaLegal() {
                       name="phone-outline"
                       size={24}
                       color="#FFFFFF"
-                      style={styles.buttonIcon}
                     />
                     <Text style={styles.contactButtonText}>Llamar</Text>
                   </TouchableOpacity>
