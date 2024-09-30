@@ -4,7 +4,6 @@ import {
   Text,
   TextInput,
   Alert,
-  StyleSheet,
   TouchableOpacity,
   Platform,
   Image,
@@ -15,6 +14,7 @@ import {
 import Swal from "sweetalert2"; // SweetAlert para alertas en la web
 import { MaterialCommunityIcons } from "@expo/vector-icons"; // Iconos
 import fondo from "./static/logo/fondo.jpg"; // Fondo de imagen
+import DropDownPicker from "react-native-dropdown-picker"; // Importar DropDownPicker
 import preguntasRelacionadas from "./preguntasRelacionadas"; // Importar preguntas desde otro archivo
 import styles from "./styles"; // Importar estilos desde otro archivo
 
@@ -33,6 +33,15 @@ const normalizarTexto = (texto) => {
 
 export default function ConsultaLegal() {
   const [tema, setTema] = useState(""); // Tema seleccionado
+  const [open, setOpen] = useState(false); // Estado para el control del Dropdown
+  const [items, setItems] = useState(
+    Object.keys(preguntasRelacionadas)
+      .sort() // Ordena los temas alfabéticamente
+      .map((tema) => ({
+        label: tema.charAt(0).toUpperCase() + tema.slice(1), // Capitaliza la primera letra del tema
+        value: tema, // El valor debe coincidir exactamente con las claves en preguntasRelacionadas
+      }))
+  ); // Lista de temas para el Dropdown
   const [paso, setPaso] = useState(0); // Paso actual en el flujo de preguntas
   const [respuestas, setRespuestas] = useState([]); // Respuestas seleccionadas
   const [precio, setPrecio] = useState(0); // Precio calculado
@@ -68,10 +77,7 @@ export default function ConsultaLegal() {
   // Maneja la selección de respuestas
   const handleRespuesta = (respuesta) => {
     const nuevasRespuestas = [...respuestas, respuesta]; // Agrega la nueva respuesta
-    const temaNormalizado = normalizarTexto(tema.trim());
-
-    // Avanza al siguiente paso o calcula el precio final
-    if (paso < preguntasRelacionadas[temaNormalizado].length) {
+    if (paso < preguntasRelacionadas[tema].length) {
       setPaso(paso + 1);
       setRespuestas(nuevasRespuestas);
     } else {
@@ -151,12 +157,21 @@ export default function ConsultaLegal() {
             {paso === 0 && (
               <View style={styles.inputContainer}>
                 <Text style={styles.label}>Tema de consulta</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Ej. Pensión alimenticia"
+                {/* Dropdown para seleccionar el tema */}
+                <DropDownPicker
+                  open={open}
                   value={tema}
-                  onChangeText={(text) => setTema(text)}
+                  items={items}
+                  setOpen={setOpen}
+                  setValue={setTema}
+                  setItems={setItems}
+                  placeholder="Selecciona un tema"
+                  style={styles.dropdown} // Estilo del dropdown cerrado
+                  dropDownContainerStyle={styles.dropdownContainer} // Estilo del contenedor de opciones
+                  textStyle={styles.dropdownText} // Estilo del texto en el dropdown
+                  arrowIconStyle={styles.dropdownArrow} // Estilo del ícono de la flecha
                 />
+
                 <TouchableOpacity style={styles.button} onPress={handleSubmit}>
                   <Text style={styles.buttonText}>Iniciar Consulta</Text>
                 </TouchableOpacity>

@@ -139,6 +139,31 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginLeft: 8,
   },
+  dropdown: {
+    borderColor: "#ccc", // Color del borde
+    borderWidth: 1, // Ancho del borde
+    backgroundColor: "#f9f9f9", // Fondo claro
+    borderRadius: 8, // Bordes redondeados
+    paddingVertical: 8, // Relleno vertical
+    paddingHorizontal: 12, // Relleno horizontal
+    height: 50, // Altura del dropdown
+    marginBottom: 20, // Espacio entre el dropdown y el botón
+  },
+  dropdownText: {
+    fontSize: 16, // Tamaño del texto
+    color: "#333", // Color del texto
+    textAlign: "left", // Alinear el texto a la izquierda
+    fontWeight: "500", // Peso del texto
+  },
+  dropdownContainer: {
+    borderColor: "#ddd", // Color del borde del contenedor de opciones
+    borderWidth: 1, // Ancho del borde del contenedor
+    borderRadius: 8, // Bordes redondeados
+    backgroundColor: "#ffffff", // Fondo blanco
+  },
+  dropdownArrow: {
+    color: "#666", // Color del ícono de la flecha
+  },
 });
 
 export default styles;

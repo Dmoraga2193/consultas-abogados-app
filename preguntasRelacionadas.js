@@ -101,7 +101,7 @@ const preguntasRelacionadas = {
       opciones: ["Sí", "No"],
     },
   ],
-  "accidente de tránsito": [
+  "accidente de transito": [
     {
       id: 1,
       texto: "¿Hubo lesionados?",
@@ -135,7 +135,7 @@ const preguntasRelacionadas = {
       opciones: ["Sí", "No"],
     },
   ],
-  "violencia doméstica": [
+  "violencia domestica": [
     {
       id: 1,
       texto: "¿Has denunciado antes?",
