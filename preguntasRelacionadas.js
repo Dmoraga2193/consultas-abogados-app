@@ -186,6 +186,108 @@ const preguntasRelacionadas = {
       opciones: ["Sí", "No"],
     },
   ],
+  "responsabilidad civil": [
+    {
+      id: 1,
+      texto: "¿El daño fue causado por negligencia o intencional?",
+      opciones: ["Negligencia", "Intencional"],
+    },
+    {
+      id: 2,
+      texto: "¿El daño es a personas o propiedad?",
+      opciones: ["Personas", "Propiedad"],
+    },
+    {
+      id: 3,
+      texto: "¿Hay seguros que cubran los daños?",
+      opciones: ["Sí", "No"],
+    },
+  ],
+  "contratos laborales": [
+    {
+      id: 1,
+      texto: "¿El contrato es indefinido o temporal?",
+      opciones: ["Indefinido", "Temporal"],
+    },
+    {
+      id: 2,
+      texto: "¿Existen cláusulas de confidencialidad o no competencia?",
+      opciones: ["Sí", "No"],
+    },
+    {
+      id: 3,
+      texto: "¿Se ha cumplido con el período de prueba?",
+      opciones: ["Sí", "No"],
+    },
+  ],
+  "derechos de los consumidores": [
+    {
+      id: 1,
+      texto: "¿El producto o servicio fue adquirido recientemente?",
+      opciones: ["Sí", "No"],
+    },
+    {
+      id: 2,
+      texto: "¿El producto está defectuoso o el servicio fue insatisfactorio?",
+      opciones: ["Defectuoso", "Insatisfactorio"],
+    },
+    {
+      id: 3,
+      texto: "¿Intentaste resolver el problema con el proveedor?",
+      opciones: ["Sí", "No"],
+    },
+  ],
+  "custodia de menores": [
+    {
+      id: 1,
+      texto: "¿Es custodia compartida o exclusiva?",
+      opciones: ["Compartida", "Exclusiva"],
+    },
+    {
+      id: 2,
+      texto: "¿Existen antecedentes de violencia o abuso?",
+      opciones: ["Sí", "No"],
+    },
+    {
+      id: 3,
+      texto: "¿Ambas partes están de acuerdo con el acuerdo de custodia?",
+      opciones: ["Sí", "No"],
+    },
+  ],
+  extranjeria: [
+    {
+      id: 1,
+      texto: "¿El trámite es de residencia o de ciudadanía?",
+      opciones: ["Residencia", "Ciudadanía"],
+    },
+    {
+      id: 2,
+      texto: "¿Tienes visa vigente?",
+      opciones: ["Sí", "No"],
+    },
+    {
+      id: 3,
+      texto: "¿Has tenido problemas legales en el país?",
+      opciones: ["Sí", "No"],
+    },
+  ],
+  "contratos mercantiles": [
+    {
+      id: 1,
+      texto: "¿Es un contrato de compraventa o de servicios?",
+      opciones: ["Compraventa", "Servicios"],
+    },
+    {
+      id: 2,
+      texto: "¿Existe algún tipo de garantía o fianza en el contrato?",
+      opciones: ["Sí", "No"],
+    },
+    {
+      id: 3,
+      texto: "¿Las partes involucradas son empresas o individuos?",
+      opciones: ["Empresas", "Individuos"],
+    },
+  ],
 };
 
 export default preguntasRelacionadas;

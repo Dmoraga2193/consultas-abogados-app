@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", alignItems: "center" },
   card: {
     backgroundColor: "white",
-    padding: 20,
+    padding: 30,
+    marginVertical: 20, // Más espacio vertical entre los elementos
     borderRadius: 10,
     width: 350,
     alignItems: "center",
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
   },
   title: { fontSize: 24, fontWeight: "bold", marginBottom: 10 },
   description: { marginBottom: 20, color: "#6c757d", textAlign: "center" },
-  inputContainer: { width: "100%", alignItems: "center" },
+  inputContainer: { width: "100%", alignItems: "center", marginTop: 20 },
   label: { marginBottom: 10, fontSize: 16, fontWeight: "500", color: "#333" },
   input: {
     width: "100%",
@@ -55,13 +56,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   button: {
-    backgroundColor: "#0870b7",
+    backgroundColor: "#007bff",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
     marginBottom: 10,
     alignItems: "center",
     width: "100%",
+    shadowColor: "#000", // Sombra suave
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5, // Para Android
   },
   buttonText: {
     color: "#fff",
@@ -74,25 +80,34 @@ const styles = StyleSheet.create({
     height: 10,
     backgroundColor: "#e0e0e0",
     borderRadius: 5,
+    overflow: "hidden", // Asegura que el contenido no se desborde
     marginBottom: 20,
   },
   progressBarFill: {
     height: "100%",
-    backgroundColor: "#f5c50c",
     borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 4, // Para Android
+  },
+  animatedProgressBar: {
+    position: "absolute",
+    height: "100%",
+    width: "100%", // Asegura que la barra ocupe todo el ancho
   },
   question: { fontSize: 18, marginBottom: 20, textAlign: "center" },
   resultContainer: { alignItems: "center" },
-  resultTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 20 },
-  resultPrice: { fontSize: 32, fontWeight: "bold", marginBottom: 20 },
+  resultTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 5 },
+  resultPrice: { fontSize: 32, fontWeight: "bold", marginBottom: 5 },
   contactCard: {
     backgroundColor: "#f9f9f9",
     padding: 20,
     borderRadius: 10,
     width: "100%",
     alignItems: "flex-start",
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: 5,
     borderColor: "#ddd",
     borderWidth: 1,
   },
@@ -121,6 +136,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flex: 1,
     marginRight: 10,
+    shadowColor: "#000", // Sombra suave
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5, // Para Android
   },
   contactButtonLlamar: {
     backgroundColor: "#34B7F1",
@@ -132,6 +152,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flex: 1,
     marginLeft: 10,
+    shadowColor: "#000", // Sombra suave
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5, // Para Android
   },
   contactButtonText: {
     color: "#FFFFFF",
@@ -140,7 +165,7 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   dropdown: {
-    borderColor: "#ccc", // Color del borde
+    borderColor: "#ddd", // Color del borde
     borderWidth: 1, // Ancho del borde
     backgroundColor: "#f9f9f9", // Fondo claro
     borderRadius: 8, // Bordes redondeados
@@ -148,6 +173,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12, // Relleno horizontal
     height: 50, // Altura del dropdown
     marginBottom: 20, // Espacio entre el dropdown y el botón
+    padding: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
   dropdownText: {
     fontSize: 16, // Tamaño del texto
@@ -163,6 +193,18 @@ const styles = StyleSheet.create({
   },
   dropdownArrow: {
     color: "#666", // Color del ícono de la flecha
+  },
+  footer: {
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10, // Espaciado
+    position: "relative", // Puede ser absolute si deseas que esté siempre al fondo
+    bottom: 0,
+    width: "100%", // Asegúrate de que ocupe todo el ancho
+  },
+  footerText: {
+    color: "#888", // Color del texto
+    fontSize: 12, // Tamaño del texto
   },
 });
 

@@ -4,7 +4,7 @@
     "slug": "consulta-abogados-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./static/logo/logo_2.png",
+    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -12,7 +12,12 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "splash": {
+        "image": "./assets/splash.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -21,7 +26,7 @@
       }
     },
     "web": {
-      "favicon": "./static/logo/logo_2.png",
+      "favicon": "./assets/logo_2.png",
       "bundler": "metro",
       "output": "static",
       "name": "consulta-abogados-app"

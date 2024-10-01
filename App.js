@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
-  TextInput,
   Alert,
   TouchableOpacity,
   Platform,
@@ -13,22 +12,23 @@ import {
 } from "react-native";
 import Swal from "sweetalert2"; // SweetAlert para alertas en la web
 import { MaterialCommunityIcons } from "@expo/vector-icons"; // Iconos
-import fondo from "./static/logo/fondo.jpg"; // Fondo de imagen
+import fondo from "./assets/fondo.jpg"; // Fondo de imagen
 import DropDownPicker from "react-native-dropdown-picker"; // Importar DropDownPicker
 import preguntasRelacionadas from "./preguntasRelacionadas"; // Importar preguntas desde otro archivo
 import styles from "./styles"; // Importar estilos desde otro archivo
+import * as SplashScreen from "expo-splash-screen"; // Importa expo-splash-screen
+import { LinearGradient } from "expo-linear-gradient";
+
+// Evita que la pantalla de splash se oculte automáticamente
+SplashScreen.preventAutoHideAsync();
 
 // Normaliza el texto ingresado para evitar errores ortográficos y de formato
 const normalizarTexto = (texto) => {
-  return (
-    texto
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "") // Elimina tildes
-      .toLowerCase()
-      .replace(/\bpencion\b/, "pension") // Correcciones ortográficas comunes
-      // ...otros reemplazos
-      .replace(/s$/, "")
-  ); // Elimina la "s" al final si es un plural
+  return texto
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // Elimina tildes
+    .toLowerCase()
+    .replace(/\bpencion\b/, "pension"); // Correcciones ortográficas comunes
 };
 
 export default function ConsultaLegal() {
@@ -46,6 +46,38 @@ export default function ConsultaLegal() {
   const [respuestas, setRespuestas] = useState([]); // Respuestas seleccionadas
   const [precio, setPrecio] = useState(0); // Precio calculado
   const [fadeAnim] = useState(new Animated.Value(0)); // Animación de fade in
+  const progressAnim = useRef(new Animated.Value(0)).current; // Controla la animación del progreso
+
+  // Función para manejar el progreso
+  const actualizarProgreso = () => {
+    const totalPreguntas =
+      preguntasRelacionadas[normalizarTexto(tema.trim())]?.length || 1;
+    const nuevoProgreso = paso / totalPreguntas;
+
+    // Animar la barra de progreso según el nuevo valor de progreso
+    Animated.timing(progressAnim, {
+      toValue: nuevoProgreso, // Progreso basado en las preguntas respondidas
+      duration: 500, // Duración de la animación
+      useNativeDriver: false, // No usamos native driver porque estamos animando el ancho (CSS)
+    }).start();
+  };
+
+  // Llamar a actualizarProgreso cada vez que cambia el paso
+  useEffect(() => {
+    if (paso > 0) {
+      actualizarProgreso();
+    }
+  }, [paso]);
+
+  // Oculta la splash automáticamente después de 3 segundos
+  useEffect(() => {
+    // Simula un retardo de 3 segundos antes de ocultar la pantalla de splash
+    const hideSplash = setTimeout(async () => {
+      await SplashScreen.hideAsync(); // Oculta la pantalla de splash
+    }, 2000); // Duración en milisegundos (2 segundos)
+
+    return () => clearTimeout(hideSplash); // Limpia el timeout si el componente se desmonta
+  }, []);
 
   // Maneja el envío del tema seleccionado
   const handleSubmit = () => {
@@ -116,9 +148,14 @@ export default function ConsultaLegal() {
     setPrecio(0);
   };
 
-  // Enviar mensaje por WhatsApp
+  // Enviar mensaje por WhatsApp con toda la información de la consulta
   const contactarPorWhatsApp = () => {
-    const url = `whatsapp://send?phone=+56938706522&text=Hola%20Juan,%20me%20gustaría%20obtener%20más%20información%20sobre%20los%20servicios%20legales.`;
+    const cotizacion = precio; // Usa el precio calculado
+    const mensaje = `Hola, hice una consulta sobre "${tema}" con la cotización de "${cotizacion}" y me gustaría proseguir.`;
+
+    const url = `whatsapp://send?phone=+56938706522&text=${encodeURIComponent(
+      mensaje
+    )}`;
     Linking.openURL(url).catch(() => {
       Alert.alert("Error", "No se pudo abrir WhatsApp");
     });
@@ -144,7 +181,7 @@ export default function ConsultaLegal() {
             {/* Logo y título */}
             <View style={styles.iconContainer}>
               <Image
-                source={require("./static/logo/logo_2.png")}
+                source={require("./assets/logo_2.png")}
                 style={styles.logo}
               />
             </View>
@@ -186,14 +223,25 @@ export default function ConsultaLegal() {
                   <View>
                     {/* Barra de progreso */}
                     <View style={styles.progressBarBackground}>
-                      <View
+                      <Animated.View
                         style={[
-                          styles.progressBarFill,
-                          { width: `${progreso * 100}%` },
+                          styles.animatedProgressBar,
+                          {
+                            width: progressAnim.interpolate({
+                              inputRange: [0, 1],
+                              outputRange: ["0%", "100%"], // Ancho de la barra en porcentaje
+                            }),
+                          },
                         ]}
-                      />
+                      >
+                        <LinearGradient
+                          colors={["#4CAF50", "#8BC34A", "#CDDC39"]} // Colores degradados
+                          start={{ x: 0, y: 0 }}
+                          end={{ x: 1, y: 0 }}
+                          style={styles.progressBarFill}
+                        />
+                      </Animated.View>
                     </View>
-
                     {/* Pregunta actual */}
                     <Text style={styles.question}>
                       {
@@ -294,7 +342,13 @@ export default function ConsultaLegal() {
             )}
           </View>
         </View>
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            © 2024 Consultas Legales APP Todos los derechos reservados.
+          </Text>
+        </View>
       </View>
+      {/* Footer */}
     </ImageBackground>
   );
 }
