@@ -17,6 +17,7 @@ import DropdownTema from "../components/DropdownTema";
 import ConsultarButton from "../components/ConsultarButton";
 import styles from "../styles/styles";
 import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
 import categoriasYTemas from "../data/categoriasYTemas";
 
 SplashScreen.preventAutoHideAsync();
@@ -135,124 +136,132 @@ export default function ConsultaLegalScreen() {
       style={styles.background}
       resizeMode="cover"
     >
-      <SafeAreaView style={styles.safeArea}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.keyboardAvoidingView}
-        >
-          <View style={styles.contentContainer}>
-            <View style={styles.card}>
-              <View style={styles.iconContainer}>
-                <Image
-                  source={require("../assets/logo_2.png")}
-                  style={styles.logo}
-                />
-              </View>
-              <Text style={styles.title}>Consulta Legal</Text>
-              <Text style={styles.description}>
-                Calcula el precio de tu consulta legal
-              </Text>
-
-              {paso === 0 && (
-                <DropdownTema
-                  onCategoriaSelect={handleCategoriaSelect}
-                  onTemaSelect={handleTemaSelect}
-                  onSubmit={handleSubmit}
-                  categoriasYTemas={categoriasYTemas}
-                />
-              )}
-
-              {paso === 1 && (
-                <View style={styles.resultContainer}>
-                  <Text style={styles.resultTitle}>
-                    Resultado de la consulta:
-                  </Text>
-                  <Text style={styles.resultInfo}>
-                    Categoría: {categoriaSeleccionada}
-                  </Text>
-                  <Text style={styles.resultInfo}>
-                    Tema: {temaSeleccionado}
-                  </Text>
-                  <Text style={styles.priceInfo}>
-                    Precio adicional:{" "}
-                    {formatearPrecio(desglosePrecio.precioAdicional)}
-                  </Text>
-                  <Text style={styles.resultPrice}>
-                    Precio total estimado: {formatearPrecio(precio)}
-                  </Text>
-                  <Text style={styles.priceNote}>
-                    Nota: El costo final puede variar dependiendo de la
-                    complejidad del caso y el valor del juicio.
-                  </Text>
-
-                  <View style={styles.contactCard}>
-                    <Text style={styles.contactTitle}>
-                      Ejecutivo de Contacto
-                    </Text>
-                    <View style={styles.contactInfo}>
-                      <MaterialCommunityIcons
-                        name="account"
-                        size={24}
-                        color="#4CAF50"
-                      />
-                      <Text style={styles.contactText}>Juan Pérez</Text>
-                    </View>
-                    <View style={styles.contactInfo}>
-                      <MaterialCommunityIcons
-                        name="phone"
-                        size={24}
-                        color="#2196F3"
-                      />
-                      <Text style={styles.contactText}>+56 9 3870 6522</Text>
-                    </View>
-                    <View style={styles.contactInfo}>
-                      <MaterialCommunityIcons
-                        name="email"
-                        size={24}
-                        color="#F44336"
-                      />
-                      <Text style={styles.contactText}>
-                        jperez@abogados.com
-                      </Text>
-                    </View>
-                  </View>
-
-                  <View style={styles.contactButtonsContainer}>
-                    <TouchableOpacity
-                      style={styles.contactButtonWhatsApp}
-                      onPress={contactarPorWhatsApp}
-                    >
-                      <MaterialCommunityIcons
-                        name="whatsapp"
-                        size={24}
-                        color="#FFFFFF"
-                      />
-                      <Text style={styles.contactButtonText}>WhatsApp</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.contactButtonLlamar}
-                      onPress={llamarDirectamente}
-                    >
-                      <MaterialCommunityIcons
-                        name="phone"
-                        size={24}
-                        color="#FFFFFF"
-                      />
-                      <Text style={styles.contactButtonText}>Llamar</Text>
-                    </TouchableOpacity>
-                  </View>
-
-                  <ConsultarButton
-                    onPress={reiniciarConsulta}
-                    title="Nueva Consulta"
-                    style={styles.buttonNuevaConsulta}
+      <StatusBar style="dark" />
+      <LinearGradient
+        colors={["rgba(255,255,255,0.1)", "rgba(255,255,255,0.1)"]}
+        style={styles.gradient}
+      >
+        <SafeAreaView style={styles.safeArea}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            style={styles.keyboardAvoidingView}
+          >
+            <View style={styles.contentContainer}>
+              <View style={styles.card}>
+                <View style={styles.iconContainer}>
+                  <Image
+                    source={require("../assets/logo_2.png")}
+                    style={styles.logo}
                   />
                 </View>
-              )}
+                <Text style={styles.title}>Consulta Legal</Text>
+                <Text style={styles.description}>
+                  Calcula el precio de tu consulta legal
+                </Text>
+
+                {paso === 0 && (
+                  <DropdownTema
+                    onCategoriaSelect={handleCategoriaSelect}
+                    onTemaSelect={handleTemaSelect}
+                    onSubmit={handleSubmit}
+                    categoriasYTemas={categoriasYTemas}
+                  />
+                )}
+
+                {paso === 1 && (
+                  <View style={styles.resultContainer}>
+                    <Text style={styles.resultTitle}>
+                      Resultado de la consulta:
+                    </Text>
+                    <Text style={styles.resultInfo}>
+                      Categoría: {categoriaSeleccionada}
+                    </Text>
+                    <Text style={styles.resultInfo}>
+                      Tema: {temaSeleccionado}
+                    </Text>
+                    <Text style={styles.priceInfo}>
+                      Precio adicional:{" "}
+                      {formatearPrecio(desglosePrecio.precioAdicional)}
+                    </Text>
+                    <Text style={styles.priceTitle}>Precio estimado:</Text>
+                    <Text style={styles.resultPrice}>
+                      {formatearPrecio(precio)}
+                    </Text>
+                    <Text style={styles.priceNote}>
+                      Nota: El costo final puede variar dependiendo de la
+                      complejidad del caso y el valor del juicio.
+                    </Text>
+
+                    <View style={styles.contactCard}>
+                      <Text style={styles.contactTitle}>
+                        Ejecutivo de Contacto
+                      </Text>
+                      <View style={styles.contactInfo}>
+                        <MaterialCommunityIcons
+                          name="account-outline"
+                          size={24}
+                          color="#4CAF50"
+                        />
+                        <Text style={styles.contactText}>Juan Pérez</Text>
+                      </View>
+                      <View style={styles.contactInfo}>
+                        <MaterialCommunityIcons
+                          name="phone-outline"
+                          size={24}
+                          color="#2196F3"
+                        />
+                        <Text style={styles.contactText}>+56 9 3870 6522</Text>
+                      </View>
+                      <View style={styles.contactInfo}>
+                        <MaterialCommunityIcons
+                          name="email-outline"
+                          size={24}
+                          color="#F44336"
+                        />
+                        <Text style={styles.contactText}>
+                          jperez@abogados.com
+                        </Text>
+                      </View>
+                    </View>
+
+                    {/* Botones de contacto */}
+                    <View style={styles.contactButtonsContainer}>
+                      <TouchableOpacity
+                        style={styles.contactButtonWhatsApp}
+                        onPress={contactarPorWhatsApp}
+                      >
+                        <MaterialCommunityIcons
+                          name="whatsapp"
+                          size={24}
+                          color="#FFFFFF"
+                        />
+                        <Text style={styles.contactButtonText}>WhatsApp</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={styles.contactButtonLlamar}
+                        onPress={llamarDirectamente}
+                      >
+                        <MaterialCommunityIcons
+                          name="phone-outline"
+                          size={24}
+                          color="#FFFFFF"
+                        />
+                        <Text style={styles.contactButtonText}>Llamar</Text>
+                      </TouchableOpacity>
+                    </View>
+
+                    <ConsultarButton
+                      onPress={reiniciarConsulta}
+                      title="Nueva Consulta"
+                      style={styles.buttonNuevaConsulta}
+                    />
+                  </View>
+                )}
+              </View>
             </View>
-          </View>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
+          </KeyboardAvoidingView>
+        </SafeAreaView>
+      </LinearGradient>
     </ImageBackground>
   );
 }

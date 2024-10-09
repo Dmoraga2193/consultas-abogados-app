@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { View, Text } from "react-native";
 import DropDownPicker from "react-native-dropdown-picker";
-import ConsultarButton from "./ConsultarButton";
+import { View, Text } from "react-native";
 import styles from "../styles/styles";
+import ConsultarButton from "../components/ConsultarButton";
 
 export default function DropdownTema({
   onCategoriaSelect,
@@ -52,7 +52,6 @@ export default function DropdownTema({
     setTemaValue(tema);
     onTemaSelect(tema);
   };
-
   return (
     <View style={styles.inputContainer}>
       <Text style={styles.label}>Categoría de consulta</Text>
@@ -75,7 +74,9 @@ export default function DropdownTema({
 
       {categoriaValue && (
         <>
-          <Text style={[styles.label, { marginTop: 20 }]}>Tema específico</Text>
+          <Text style={[styles.label, { marginTop: 20 }]}>
+            Tema de consulta
+          </Text>
           <DropDownPicker
             open={openTema}
             value={temaValue}
