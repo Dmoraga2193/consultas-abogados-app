@@ -27,6 +27,8 @@ export default function DropdownTema({ tema, setTema, handleSubmit }) {
         setValue={setTema}
         setItems={setItems}
         placeholder="Selecciona un tema"
+        zIndex={3000} // Aumenta este valor
+        zIndexInverse={1000}
         style={styles.dropdown} // Estilo del dropdown cerrado
         dropDownContainerStyle={styles.dropdownContainer} // Estilo del contenedor de opciones
         textStyle={styles.dropdownText} // Estilo del texto en el dropdown

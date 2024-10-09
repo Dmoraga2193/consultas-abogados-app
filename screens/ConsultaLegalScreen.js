@@ -8,7 +8,6 @@ import {
   TouchableOpacity,
   Linking,
   Image,
-  SafeAreaView,
 } from "react-native";
 import preguntasRelacionadas from "../data/preguntasRelacionadas";
 import DropdownTema from "../components/DropdownTema";
@@ -19,6 +18,7 @@ import styles from "../styles/styles";
 import fondo from "../assets/fondo.jpg";
 import * as SplashScreen from "expo-splash-screen";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { StatusBar } from "expo-status-bar";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -134,6 +134,7 @@ export default function ConsultaLegalScreen() {
       style={styles.background}
       resizeMode="cover"
     >
+      <StatusBar style="dark" />
       <View style={styles.overlay}>
         <View style={styles.container}>
           <View style={styles.card}>
