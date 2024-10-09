@@ -13,6 +13,7 @@
     },
     "ios": {
       "supportsTablet": true,
+      "bundleIdentifier": "com.consultalegal.app",
       "splash": {
         "image": "./assets/splash.png",
         "resizeMode": "contain",
@@ -23,7 +24,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.consultalegal.app"
     },
     "web": {
       "favicon": "./assets/logo_2.png",
