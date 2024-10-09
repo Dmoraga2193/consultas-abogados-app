@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
-import { View, Text } from "react-native";
+import { View, Text, Dimensions } from "react-native";
 import styles from "../styles/styles";
 import ConsultarButton from "../components/ConsultarButton";
+
+const { height } = Dimensions.get("window");
 
 export default function DropdownTema({
   onCategoriaSelect,
@@ -67,9 +69,13 @@ export default function DropdownTema({
         zIndex={3000}
         zIndexInverse={1000}
         style={styles.dropdown}
-        dropDownContainerStyle={styles.dropdownContainer}
+        dropDownContainerStyle={[
+          styles.dropdownContainer,
+          { maxHeight: height * 0.3 },
+        ]}
         textStyle={styles.dropdownText}
         arrowIconStyle={styles.dropdownArrow}
+        dropDownDirection="BOTTOM"
       />
 
       {categoriaValue && (
@@ -89,9 +95,13 @@ export default function DropdownTema({
             zIndex={2000}
             zIndexInverse={2000}
             style={styles.dropdown}
-            dropDownContainerStyle={styles.dropdownContainer}
+            dropDownContainerStyle={[
+              styles.dropdownContainer,
+              { maxHeight: height * 0.3 },
+            ]}
             textStyle={styles.dropdownText}
             arrowIconStyle={styles.dropdownArrow}
+            dropDownDirection="BOTTOM"
           />
         </>
       )}

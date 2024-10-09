@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     padding: 30,
     marginVertical: 20, // Más espacio vertical entre los elementos
     borderRadius: 10,
-    width: 350,
+    width: 380,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -147,10 +147,10 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   resultPrice: {
-    fontSize: 28,
+    fontSize: 22,
     fontWeight: "bold",
     color: "#007bff",
-    marginTop: 5,
+    marginTop: 3,
     textAlign: "center",
   },
   contactCard: {
@@ -237,14 +237,14 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   priceInfo: {
-    fontSize: 16,
-    marginBottom: 5,
+    fontSize: 14,
+    marginBottom: 3,
     color: "#555",
     textAlign: "left",
   },
   priceNote: {
-    fontSize: 14,
-    marginTop: 10,
+    fontSize: 10,
+    marginTop: 3,
     color: "#666",
     fontStyle: "italic",
     textAlign: "center",

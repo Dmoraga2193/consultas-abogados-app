@@ -26,8 +26,9 @@ export default function ConsultaLegalScreen() {
   const [paso, setPaso] = useState(0);
   const [categoriaSeleccionada, setCategoriaSeleccionada] = useState("");
   const [temaSeleccionado, setTemaSeleccionado] = useState("");
-  const [precio, setPrecio] = useState(0);
-  const [desglosePrecio, setDesglosePrecio] = useState({});
+  const [precioBase, setPrecioBase] = useState(0);
+  const [precioAdicional, setPrecioAdicional] = useState("");
+  const [precioTotal, setPrecioTotal] = useState(0);
 
   useEffect(() => {
     const hideSplash = setTimeout(async () => {
@@ -61,40 +62,41 @@ export default function ConsultaLegalScreen() {
       return;
     }
 
-    let precioBase, precioAdicional;
+    let base = 0;
+    let adicional = "";
+    let adicionalNumerico = 0;
 
     if (
       categoria === "Familia" &&
       categoriaInfo.preciosEspecificos &&
       categoriaInfo.preciosEspecificos[tema]
     ) {
-      ({ precioBase, precioAdicional } =
-        categoriaInfo.preciosEspecificos[tema]);
+      base = categoriaInfo.preciosEspecificos[tema].precioBase;
+      adicional = categoriaInfo.preciosEspecificos[tema].precioAdicional;
     } else {
-      precioBase = categoriaInfo.precioBase;
-      precioAdicional = categoriaInfo.precioAdicional;
+      base = categoriaInfo.precioBase;
+      adicional = categoriaInfo.precioAdicional;
     }
 
-    let precioTotal = precioBase;
-    let precioAdicionalEstimado = precioAdicional;
+    setPrecioBase(base);
 
-    if (typeof precioAdicional === "string") {
-      if (precioAdicional.includes("valor juicio")) {
-        precioAdicionalEstimado = 200000; // Valor estimado, se debe ajustar según el caso
-        precioTotal += precioAdicionalEstimado;
-      } else if (precioAdicional.includes("%")) {
-        precioAdicionalEstimado = "Por determinar (% del juicio)";
+    if (typeof adicional === "string") {
+      if (adicional.includes("valor juicio")) {
+        setPrecioAdicional("Por determinar (+200.000 + valor juicio)");
+        adicionalNumerico = 200000;
+      } else if (adicional.includes("%")) {
+        setPrecioAdicional(`Por determinar (${adicional})`);
+        adicionalNumerico = 0; // We can't calculate the percentage without knowing the trial value
+      } else {
+        setPrecioAdicional(adicional);
       }
-    } else if (typeof precioAdicional === "number") {
-      precioTotal += precioAdicional;
+    } else if (typeof adicional === "number") {
+      setPrecioAdicional(adicional);
+      adicionalNumerico = adicional;
     }
 
-    setDesglosePrecio({
-      precioBase,
-      precioAdicional: precioAdicionalEstimado,
-    });
-
-    setPrecio(precioTotal);
+    const total = base + adicionalNumerico;
+    setPrecioTotal(total);
   };
 
   const formatearPrecio = (valor) => {
@@ -109,13 +111,14 @@ export default function ConsultaLegalScreen() {
     setPaso(0);
     setCategoriaSeleccionada("");
     setTemaSeleccionado("");
-    setPrecio(0);
-    setDesglosePrecio({});
+    setPrecioBase(0);
+    setPrecioAdicional("");
+    setPrecioTotal(0);
   };
 
   const contactarPorWhatsApp = () => {
     const mensaje = `Hola, hice una consulta sobre "${categoriaSeleccionada} - ${temaSeleccionado}" con la cotización de "${formatearPrecio(
-      precio
+      precioTotal
     )}" y me gustaría proseguir.`;
     const url = `whatsapp://send?phone=+56938706522&text=${encodeURIComponent(
       mensaje
@@ -173,23 +176,24 @@ export default function ConsultaLegalScreen() {
                     <Text style={styles.resultTitle}>
                       Resultado de la consulta:
                     </Text>
-                    <Text style={styles.resultInfo}>
-                      Categoría: {categoriaSeleccionada}
-                    </Text>
-                    <Text style={styles.resultInfo}>
-                      Tema: {temaSeleccionado}
+                    <Text style={styles.priceTitle}>Desglose del precio:</Text>
+                    <Text style={styles.priceInfo}>
+                      Precio base: {formatearPrecio(precioBase)}
                     </Text>
                     <Text style={styles.priceInfo}>
                       Precio adicional:{" "}
-                      {formatearPrecio(desglosePrecio.precioAdicional)}
+                      {typeof precioAdicional === "number"
+                        ? formatearPrecio(precioAdicional)
+                        : precioAdicional}
                     </Text>
-                    <Text style={styles.priceTitle}>Precio estimado:</Text>
                     <Text style={styles.resultPrice}>
-                      {formatearPrecio(precio)}
+                      Precio total estimado: {formatearPrecio(precioTotal)}
                     </Text>
                     <Text style={styles.priceNote}>
-                      Nota: El costo final puede variar dependiendo de la
-                      complejidad del caso y el valor del juicio.
+                      Nota: El precio total incluye el precio base y el
+                      adicional (si aplica). El costo final puede variar
+                      dependiendo de la complejidad del caso y el valor del
+                      juicio.
                     </Text>
 
                     <View style={styles.contactCard}>
