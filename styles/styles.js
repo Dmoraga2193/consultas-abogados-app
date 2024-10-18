@@ -2,15 +2,62 @@ import { StyleSheet, Dimensions } from "react-native";
 
 const { width, height } = Dimensions.get("window");
 
+// Color Palettes
+const colorPalettes = {
+  midnightBlueSilver: {
+    primary: "#0C2340", // Midnight Blue
+    secondary: "#C0C0C0", // Silver
+    background: "#F8F9FA", // Off-White
+    text: "#333333", // Dark Gray
+    accent: "#4A90E2", // Sky Blue
+  },
+  graphiteCoral: {
+    primary: "#3C4048", // Graphite
+    secondary: "#FF6B6B", // Coral
+    background: "#FFFFFF", // White
+    text: "#2C3E50", // Dark Slate Gray
+    accent: "#34C759", // Green
+  },
+  forestGreenIvory: {
+    primary: "#2C5F2D", // Forest Green
+    secondary: "#FFFFF0", // Ivory
+    background: "#F4F9F4", // Light Mint
+    text: "#1A1A1A", // Almost Black
+    accent: "#FFB30F", // Golden Yellow
+  },
+  slateBlueChampagne: {
+    primary: "#4E5D94", // Slate Blue
+    secondary: "#F7E7CE", // Champagne
+    background: "#FAFAFA", // Light Gray
+    text: "#2F3542", // Dark Slate
+    accent: "#FF6B6B", // Coral
+  },
+  charcoalTeal: {
+    primary: "#2F4F4F", // Dark Slate Gray
+    secondary: "#40E0D0", // Turquoise
+    background: "#F5F5F5", // White Smoke
+    text: "#333333", // Dark Gray
+    accent: "#FF7F50", // Coral
+  },
+};
+
+// Choose a color palette here
+const colors = colorPalettes.midnightBlueSilver;
+
 const styles = StyleSheet.create({
-  background: { flex: 1, resizeMode: "cover", justifyContent: "center" },
+  background: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    backgroundColor: colors.background,
+  },
   safeArea: {
     position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    backgroundColor: `${colors.background}CC`,
     padding: 20,
     justifyContent: "center",
     alignItems: "center",
@@ -27,7 +74,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   card: {
-    backgroundColor: "white",
+    backgroundColor: colors.background,
     padding: 30,
     marginVertical: 20, // Más espacio vertical entre los elementos
     borderRadius: 10,
@@ -60,14 +107,14 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#333",
+    color: colors.text,
     textAlign: "center",
     marginTop: 40,
   },
   description: {
     fontSize: 16,
     marginBottom: 20,
-    color: "#6c757d",
+    color: colors.secondary,
     textAlign: "center",
   },
   inputContainer: {
@@ -77,12 +124,12 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     marginBottom: 5,
-    color: "#333",
+    color: colors.text,
   },
   dropdown: {
-    borderColor: "#ddd", // Color del borde
+    borderColor: colors.secondary,
     borderWidth: 1, // Ancho del borde
-    backgroundColor: "#f9f9f9", // Fondo claro
+    backgroundColor: colors.background,
     borderRadius: 8, // Bordes redondeados
     paddingVertical: 8, // Relleno vertical
     paddingHorizontal: 12, // Relleno horizontal
@@ -96,7 +143,7 @@ const styles = StyleSheet.create({
   },
   dropdownText: {
     fontSize: 16, // Tamaño del texto
-    color: "#333", // Color del texto
+    color: colors.text,
     textAlign: "left", // Alinear el texto a la izquierda
     fontWeight: "500", // Peso del texto
   },
@@ -110,7 +157,7 @@ const styles = StyleSheet.create({
     color: "#666", // Color del ícono de la flecha
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: colors.primary,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -124,7 +171,7 @@ const styles = StyleSheet.create({
     elevation: 5, // Para Android
   },
   buttonText: {
-    color: "#fff",
+    color: colors.background,
     fontWeight: "bold",
     fontSize: 16,
     textAlign: "center",
@@ -149,18 +196,18 @@ const styles = StyleSheet.create({
   resultPrice: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#007bff",
+    color: colors.primary,
     marginTop: 3,
     textAlign: "center",
   },
   contactCard: {
-    backgroundColor: "#f9f9f9",
+    backgroundColor: `${colors.secondary}22`,
     padding: 20,
     borderRadius: 10,
     width: "100%",
     alignItems: "flex-start",
     marginTop: 5,
-    borderColor: "#ddd",
+    borderColor: colors.secondary,
     borderWidth: 1,
   },
   contactTitle: {
