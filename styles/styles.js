@@ -6,7 +6,7 @@ const { width, height } = Dimensions.get("window");
 const colorPalettes = {
   midnightBlueSilver: {
     primary: "#0C2340", // Midnight Blue
-    secondary: "#C0C0C0", // Silver
+    secondary: "#939393", // Silver
     background: "#F8F9FA", // Off-White
     text: "#333333", // Dark Gray
     accent: "#4A90E2", // Sky Blue
